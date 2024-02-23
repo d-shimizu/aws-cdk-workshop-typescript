@@ -1,19 +1,15 @@
 import { Duration, Stack, StackProps } from 'aws-cdk-lib';
-import * as sns from 'aws-cdk-lib/aws-sns';
-import * as subs from 'aws-cdk-lib/aws-sns-subscriptions';
-import * as sqs from 'aws-cdk-lib/aws-sqs';
 import { Construct } from 'constructs';
+// ec2 パッケージをインポート
+import * as ec2 from "aws-cdk-lib/aws-ec2";
 
 export class AwsCdkWorkshopTypescriptStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
-    const queue = new sqs.Queue(this, 'AwsCdkWorkshopTypescriptQueue', {
-      visibilityTimeout: Duration.seconds(300)
-    });
-
-    const topic = new sns.Topic(this, 'AwsCdkWorkshopTypescriptTopic');
-
-    topic.addSubscription(new subs.SqsSubscription(queue));
+	// VPC を作成
+	const vpc = new ec2.Vpc(this, "BlogVpc", {
+		ipAddresses: ec2.IpAddresses.cidr('10.0.0.0/16'),
+	});
   }
 }
